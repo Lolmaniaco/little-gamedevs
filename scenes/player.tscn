@@ -1,17 +1,19 @@
-[gd_scene load_steps=9 format=3 uid="uid://bqsodl2pngc4o"]
+[gd_scene load_steps=11 format=3 uid="uid://bqsodl2pngc4o"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_v254h"]
-[ext_resource type="Texture2D" uid="uid://cu61xvf2jooym" path="res://icon.svg" id="2_e26ot"]
+[ext_resource type="Texture2D" uid="uid://dm334xvutshwu" path="res://assets/textures/char/player/head-reformatted.png" id="2_hpuvd"]
 [ext_resource type="PackedScene" uid="uid://drmg3mgdl4b4h" path="res://scenes/state_machine/state_machine.tscn" id="3_0qvud"]
 [ext_resource type="Script" path="res://scripts/idle.gd" id="4_a722k"]
 [ext_resource type="Script" path="res://scripts/player_movement.gd" id="4_apx5e"]
-[ext_resource type="Script" path="res://scenes/move.gd" id="5_aw1gv"]
+[ext_resource type="Script" path="res://scripts/move.gd" id="5_loo4u"]
+[ext_resource type="Script" path="res://scripts/jump.gd" id="6_6r4xq"]
+[ext_resource type="Script" path="res://scenes/fall.gd" id="7_s5amj"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_bsofa"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_e26ot")
+"texture": ExtResource("2_hpuvd")
 }],
 "loop": true,
 "name": &"idle",
@@ -25,22 +27,39 @@ size = Vector2(128, 128)
 script = ExtResource("1_v254h")
 
 [node name="movement_animations" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
 sprite_frames = SubResource("SpriteFrames_bsofa")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.3, 0.3)
 shape = SubResource("RectangleShape2D_3tk3i")
 
 [node name="movement_state_machine" parent="." node_paths=PackedStringArray("starting_state") instance=ExtResource("3_0qvud")]
 starting_state = NodePath("idle")
 
-[node name="idle" type="Node" parent="movement_state_machine" node_paths=PackedStringArray("move_state")]
+[node name="idle" type="Node" parent="movement_state_machine" node_paths=PackedStringArray("fall_state", "jump_state", "move_state")]
 script = ExtResource("4_a722k")
+fall_state = NodePath("../fall")
+jump_state = NodePath("../jump")
 move_state = NodePath("../move")
 
-[node name="move" type="Node" parent="movement_state_machine" node_paths=PackedStringArray("idle_state")]
-script = ExtResource("5_aw1gv")
+[node name="move" type="Node" parent="movement_state_machine" node_paths=PackedStringArray("fall_state", "idle_state", "jump_state")]
+script = ExtResource("5_loo4u")
+fall_state = NodePath("../fall")
 idle_state = NodePath("../idle")
+jump_state = NodePath("../jump")
+
+[node name="jump" type="Node" parent="movement_state_machine" node_paths=PackedStringArray("fall_state", "idle_state", "move_state")]
+script = ExtResource("6_6r4xq")
+fall_state = NodePath("../fall")
+idle_state = NodePath("../idle")
+move_state = NodePath("../move")
+
+[node name="fall" type="Node" parent="movement_state_machine" node_paths=PackedStringArray("idle_state", "move_state")]
+script = ExtResource("7_s5amj")
+idle_state = NodePath("../idle")
+move_state = NodePath("../move")
 
 [node name="player_movement" type="Node" parent="."]
 script = ExtResource("4_apx5e")
