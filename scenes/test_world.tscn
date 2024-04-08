@@ -1,12 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://45tm2c0in3ro"]
+[gd_scene load_steps=5 format=3 uid="uid://45tm2c0in3ro"]
 
+[ext_resource type="Script" path="res://scenes/test_world.gd" id="1_hfqqd"]
 [ext_resource type="PackedScene" uid="uid://v04qhe5bf4u4" path="res://scenes/first_test_level.tscn" id="1_snq05"]
 [ext_resource type="PackedScene" uid="uid://bqsodl2pngc4o" path="res://scenes/player.tscn" id="2_4e40x"]
+[ext_resource type="PackedScene" uid="uid://cbgpsqioeu6mp" path="res://scenes/grappling_node.tscn" id="4_q0bjk"]
 
 [node name="Test World" type="Node2D"]
+script = ExtResource("1_hfqqd")
+metadata/_edit_horizontal_guides_ = [-393.0]
 
 [node name="First Test Level" parent="." instance=ExtResource("1_snq05")]
 position = Vector2(493, 428)
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(489, 106)
+position_smoothing_enabled = true
+
 [node name="player" parent="." instance=ExtResource("2_4e40x")]
 position = Vector2(489, 108)
+
+[node name="Grappling Node" parent="." instance=ExtResource("4_q0bjk")]
+position = Vector2(395, 141)

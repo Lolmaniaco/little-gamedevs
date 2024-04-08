@@ -1,10 +1,8 @@
 class_name State
 extends Node
 
-@export
-var animation_name: String
-@export
-var move_speed: float = 400
+@export var animation_name: String
+@export var move_speed: float = 400
 
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -32,3 +30,6 @@ func get_movement_input() -> float:
 
 func get_jump() -> bool:
 	return move_component.wants_jump()
+
+func get_action() -> bool:
+	return move_component.pressed_action_button()
